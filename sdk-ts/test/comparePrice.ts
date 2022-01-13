@@ -2,7 +2,7 @@ import { ALPHA_CONFIG, PUBLIC_CONFIG } from "../src/constants/configs";
 import { PriceInfo } from "../src/utils/PriceInfo";
 import { Connection } from "@solana/web3.js";
 import invariant from "tiny-invariant";
-import { Dex, TokenID } from "../src";
+import { delay, Dex, TokenID } from "../src";
 
 const [,,production] = process.argv;
 invariant(['alpha', 'public'].includes(production));
@@ -59,7 +59,6 @@ const priceInfo = new PriceInfo(config);
 const conn = new Connection("https://apricot.genesysgo.net/", "confirmed");
 
 async function doPrice() {
-
   console.log(`\nCurrent time: ${new Date().toLocaleString()}\n`);
 
   for (const poolConfig of config.getPoolConfigList()) {
@@ -81,17 +80,8 @@ async function doPrice() {
   }
 }
 
-let loops = 0;
-(async () => {
-  while(true) {
-    await doPrice();
-    loops ++;
-  }
-})();
-
-process.on('SIGINT', function() {
-  console.log(`\nEnd time: ${new Date().toLocaleString()}`);
-  console.log(`---- statistics of price difference ----`);
+async function doStats () {
+  console.log(`\n---- statistics of price difference ----`);
 
   console.log(`${loops} loops of prices comparision did.`);
 
@@ -110,6 +100,22 @@ process.on('SIGINT', function() {
   bigDiffs.forEach(d => {
     console.log(`Difference: ${d.diffPercent}, token: ${d.tokenId}, price: ${d.priceUsing}, price by chain: ${d.priceByChain}`);
   });
+}
 
+let loops = 0;
+(async () => {
+  while(true) {
+    await doPrice();
+    if (++loops % 1 === 0) {
+      await doStats();
+    }
+    await delay(3000);
+  }
+})();
+
+/*
+process.on('SIGINT', async function() {
+  await doStats();
   process.exit();
 });
+*/
