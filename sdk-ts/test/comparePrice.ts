@@ -67,16 +67,21 @@ async function doPrice() {
     const tokId = poolConfig.tokenId;
     console.log(`Fetching price for ${tokId}`);
 
-    const price = await priceInfo.fetchPrice(tokId, conn);
-    console.log(`Price for ${tokId}: ${price}`);
-    
-    const price2 = await priceInfo.fetchPrice(tokId, conn, true);
-    console.log(`Price by chain for ${tokId}: ${price2}`);
+    try {
+      const price = await priceInfo.fetchPrice(tokId, conn);
+      console.log(`Price for ${tokId}: ${price}`);
+      
+      const price2 = await priceInfo.fetchPrice(tokId, conn, true);
+      console.log(`Price by chain for ${tokId}: ${price2}`);
 
-    const diffNormalised = Math.abs(price - price2) / price;
-    console.log(`Normalised Price diff: ${diffNormalised}\n`);
+      const diffNormalised = Math.abs(price - price2) / price;
+      console.log(`Normalised Price diff: ${diffNormalised}\n`);
 
-    priceStats.add(new PriceDiffInfo(diffNormalised, tokId, price, price2));
+      priceStats.add(new PriceDiffInfo(diffNormalised, tokId, price, price2));
+    } catch (err) {
+      console.log(`Error `, err);
+      continue;
+    }
   }
 }
 
