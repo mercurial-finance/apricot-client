@@ -28,9 +28,6 @@
     "fix": "eslint --fix src"
   },
   "dependencies": {
-    "@apricot-lend/solana-swaps-js": "0.1.18",
-    "@project-serum/borsh": "^0.2.3",
-    "@pythnetwork/client": "^2.5.1",
     "@solana/spl-token": "^0.1.8",
     "@solana/web3.js": "^1.37.0",
     "decimal.js": "^10.3.1",
