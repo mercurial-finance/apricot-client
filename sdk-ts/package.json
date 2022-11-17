@@ -1,6 +1,6 @@
 {
   "name": "@mercurial-finance/apricot-sdk",
-  "version": "0.17.5",
+  "version": "0.17.6",
   "description": "TS SDK for Apricot on Solana",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -28,7 +28,7 @@
     "fix": "eslint --fix src"
   },
   "dependencies": {
-    "@solana/spl-token": "^0.1.8",
+    "@solana/spl-token": "0.1.8",
     "@solana/web3.js": "^1.37.0",
     "decimal.js": "^10.3.1",
     "tiny-invariant": "^1.1.0"
