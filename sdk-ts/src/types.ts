@@ -221,6 +221,13 @@ export class AppConfig {
   getPoolIdList(): number[] {
     return Object.values(this.tokenIdToPoolId);
   }
+  getPoolIdByTokenMint(tokenMint: string): number | undefined {
+    const tokenKey = Object.entries(this.mints).find(([_, mint]) =>
+      new PublicKey(tokenMint).equals(mint),
+    )?.[0] as TokenID;
+    if (!tokenKey) return undefined;
+    return this.tokenIdToPoolId[tokenKey];
+  }
   getTokenIdByPoolId(targetPoolId: number): TokenID {
     for (const [tokenId, poolId] of Object.entries(this.tokenIdToPoolId)) {
       if (poolId === targetPoolId) return tokenId as TokenID;
